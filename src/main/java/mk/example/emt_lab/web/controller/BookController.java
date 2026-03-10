@@ -1,5 +1,6 @@
 package mk.example.emt_lab.web.controller;
 
+import mk.example.emt_lab.model.enums.Category;
 import org.springframework.stereotype.Controller;
 
 
@@ -24,7 +25,10 @@ public class BookController {
     }
 
     @GetMapping
-    ResponseEntity<List<DisplayBookDto>> findAll() {
+    ResponseEntity<List<DisplayBookDto>> findAll(@RequestParam(required = false) Category category) {
+        if (category != null) {
+            return ResponseEntity.ok(bookApplicationService.findAllByCategory(category));
+        }
         return ResponseEntity.ok(bookApplicationService.findAll());
     }
 

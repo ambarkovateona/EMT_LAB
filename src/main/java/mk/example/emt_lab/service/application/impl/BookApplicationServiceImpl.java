@@ -3,6 +3,7 @@ import mk.example.emt_lab.model.domain.Author;
 import mk.example.emt_lab.model.domain.Book;
 import mk.example.emt_lab.model.dto.CreateBookDto;
 import mk.example.emt_lab.model.dto.DisplayBookDto;
+import mk.example.emt_lab.model.enums.Category;
 import mk.example.emt_lab.model.exception.AuthorNotFoundException;
 import mk.example.emt_lab.repository.AuthorRepository;
 import mk.example.emt_lab.service.application.BookApplicationService;
@@ -65,5 +66,10 @@ public class BookApplicationServiceImpl implements BookApplicationService {
     public Optional<DisplayBookDto> markAsRented(Long id) {
         return bookService.markAsRented(id)
                 .map(DisplayBookDto::from);
+    }
+
+    @Override
+    public List<DisplayBookDto> findAllByCategory(Category category) {
+        return DisplayBookDto.from(bookService.findAllByCategory(category));
     }
 }

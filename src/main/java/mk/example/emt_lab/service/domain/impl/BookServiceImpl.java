@@ -2,6 +2,7 @@ package mk.example.emt_lab.service.domain.impl;
 
 
 import mk.example.emt_lab.model.domain.Book;
+import mk.example.emt_lab.model.enums.Category;
 import mk.example.emt_lab.model.enums.State;
 import mk.example.emt_lab.model.exception.BookNotFoundException;
 import mk.example.emt_lab.model.exception.NoAvailableCopiesException;
@@ -27,9 +28,10 @@ public class BookServiceImpl implements BookService {
                 .save(book);
     }
 
+
     @Override
     public Optional<Book> deleteById(Long id) {
-        Optional<Book> optionalBook = bookRepository.findById(id);
+        Optional<Book> optionalBook = bookRepository.findByIdAndDeletedFalse(id);
 
         if (optionalBook.isEmpty()) {
             return Optional.empty();
@@ -37,29 +39,26 @@ public class BookServiceImpl implements BookService {
 
         Book book = optionalBook.get();
 
-        if (book.getState() != State.BAD) {
-            return Optional.empty();
-        }
 
-        bookRepository.delete(book);
+        book.setDeleted(true);
+        bookRepository.save(book);
+
         return optionalBook;
     }
 
     @Override
     public List<Book> findAll() {
-        return bookRepository
-                .findAll();
+        return bookRepository.findAllByDeletedFalse();
     }
 
     @Override
     public Optional<Book> findById(Long id) {
-        return bookRepository
-                .findById(id);
+        return bookRepository.findByIdAndDeletedFalse(id);
     }
 
     @Override
     public Optional<Book> markAsRented(Long id) {
-       Book book=bookRepository.findById(id)
+       Book book=bookRepository.findByIdAndDeletedFalse(id)
                .orElseThrow(()->new BookNotFoundException(id));
 
         if (book.getAvailableCopies() <= 0) {
@@ -74,7 +73,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public Optional<Book> update(Long id, Book book) {
      return bookRepository
-                .findById(id)
+                .findByIdAndDeletedFalse(id)
                 .map((existingBook) -> {
                   existingBook.setName(book.getName());
                   existingBook.setAuthor(book.getAuthor());
@@ -84,5 +83,11 @@ public class BookServiceImpl implements BookService {
 
                     return bookRepository.save(existingBook);
                 });
+    }
+
+    @Override
+    public List<Book> findAllByCategory(Category category) {
+        return bookRepository
+                .findAllByCategoryAndDeletedFalse(category);
     }
 }

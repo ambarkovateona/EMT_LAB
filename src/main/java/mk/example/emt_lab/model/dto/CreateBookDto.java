@@ -18,12 +18,13 @@ public record CreateBookDto(
         Long authorId,
         State state,
         @Positive
-        Integer availableCopies
+        Integer availableCopies,
+        Boolean deleted
 
 
 ) {
     public Book toBook(Author author) {
-        return new Book(author,availableCopies,category,name,state);
+        return new Book(author,availableCopies,category,name,state,deleted);
 
     }
 

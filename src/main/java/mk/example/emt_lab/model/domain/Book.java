@@ -22,12 +22,15 @@ public class Book extends BaseAuditableEntity {
 
     private Integer availableCopies;
 
-    public Book(Author author, Integer availableCopies, Category category, String name, State state) {
+    private Boolean deleted = false; //soft delete
+
+    public Book(Author author, Integer availableCopies, Category category, String name, State state, Boolean deleted) {
         this.author = author;
         this.availableCopies = availableCopies;
         this.category = category;
         this.name = name;
         this.state = state;
+        this.deleted = deleted;
     }
 
     public Book() {
@@ -71,5 +74,13 @@ public class Book extends BaseAuditableEntity {
 
     public void setState(State state) {
         this.state = state;
+    }
+
+    public Boolean getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
     }
 }

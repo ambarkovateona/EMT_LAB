@@ -2,6 +2,7 @@ package mk.example.emt_lab.service.domain;
 
 
 import mk.example.emt_lab.model.domain.Book;
+import mk.example.emt_lab.model.enums.Category;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,4 +19,5 @@ public interface BookService {
     Optional<Book> deleteById(Long id);
 
     Optional<Book> markAsRented(Long id);
+    List<Book> findAllByCategory(Category category);
 }
